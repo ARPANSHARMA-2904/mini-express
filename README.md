@@ -1,9 +1,9 @@
 
 ---
 
-# 🚀 Mini HTTP Server (From Scratch – No Express)
+#  Mini HTTP Server (From Scratch – No Express)
 
-## 📌 Overview
+##  Overview
 
 This project is a **lightweight HTTP server built using Node.js core modules only**, without using Express or any external frameworks.
 
@@ -17,7 +17,7 @@ It demonstrates how frameworks like Express work internally by implementing:
 
 ---
 
-## 🧠 Why this project exists
+##  Why this project exists
 
 The goal of this project is to understand:
 
@@ -29,14 +29,14 @@ The goal of this project is to understand:
 
 ---
 
-# ⚙️ Tech Stack
+#  Tech Stack
 
 * Node.js (Core `http` module)
 * JavaScript (ES6)
 
 ---
 
-# 📦 Core Components
+#  Core Components
 
 ## 1. `http.createServer()`
 
@@ -217,23 +217,6 @@ function post(path, handler) {
 }
 ```
 
----
-
-## ⚠️ IMPORTANT BUG IN YOUR CODE
-
-Your `post()` function currently has:
-
-```js
-method: "GET"
-```
-
-It should be:
-
-```js
-method: "POST"
-```
-
----
 
 ## 9. Route Matching System (`matchRoutes`)
 
@@ -312,26 +295,7 @@ const server = http.createServer((req, res) => {
 
    * return 404
 
----
 
-## ⚠️ BUG IN SERVER CODE
-
-You wrote:
-
-```js
-if (handler) {
-```
-
-But `handler` is not defined.
-
-It should be:
-
-```js
-if (result) {
-    req.params = result.params;
-    return result.handler(req, res);
-}
-```
 
 ---
 
@@ -378,7 +342,7 @@ post("/users", (req, res) => {
 
 ---
 
-## 🔄 Full Request Lifecycle
+##  Full Request Lifecycle
 
 ### Example: `GET /users/42`
 
@@ -392,32 +356,4 @@ post("/users", (req, res) => {
 7. response sent
 ```
 
----
-
-## 🚀 What you learned
-
-* How Node.js HTTP server works internally
-* How Express routing works under the hood
-* Middleware architecture design
-* Route parameter extraction
-* Request lifecycle handling
-
----
-
-## 🔥 Future Improvements
-
-* Query parameter parsing
-* Route priority system (exact > dynamic)
-* Middleware per route
-* Error handling middleware
-* Response helper functions
-* Express-like `app.listen()` wrapper
-
----
-
-## 🧠 Final Thought
-
-This project is essentially a **mini Express.js clone**, built from scratch using only Node.js core modules.
-
----
 
