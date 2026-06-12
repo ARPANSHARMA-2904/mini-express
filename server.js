@@ -98,7 +98,7 @@ function matchRoutes(req) {
 
     //Registering middleware
     use(logger);
-    use(jsonParsor);
+    use(jsonParser);
 
     //get(path,handler)
     function get(path, handler) {
@@ -152,7 +152,8 @@ function matchRoutes(req) {
                 const result = matchRoutes(req);
 
                 if (result) {
-                    return handler(req, res);
+                    req.params = result.params;
+                    return result.handler(req, res);
                 }
                 res.statusCode = 404;
                 res.end("Route not Found");
