@@ -112,7 +112,7 @@ function matchRoutes(req) {
     //post(path,handler)
     function post(path, handler) {
         routes.push({
-            method: "GET",
+            method: "POST",
             path,
             handler
         })
@@ -151,7 +151,7 @@ function matchRoutes(req) {
             try {
                 const result = matchRoutes(req);
 
-                if (handler) {
+                if (result) {
                     return handler(req, res);
                 }
                 res.statusCode = 404;
