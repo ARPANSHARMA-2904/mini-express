@@ -171,6 +171,12 @@ const server = http.createServer((req, res) => {
     res.send = function (data) {
         res.end(data);
     }
+    res.json = function(data){
+        //So I actually Chatgpt-ed the explanation for what exactly res.json is-> it technically sends
+        //an object like string to the client
+        res.setHeader("Content-Type","application/json");
+        return res.send(JSON.stringify(data));
+    }
     let index = 0;
     function next() {
         const middleware = middlewares[index];
