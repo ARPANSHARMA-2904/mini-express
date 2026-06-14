@@ -96,8 +96,21 @@ function matchRoutes(req) {
         });
     }
 
+    //3. Query Parser
+    function queryParser(req,res,next){
+        if(!req.url.includes("?")){
+            req.query = {};
+            return next();
+        }else{
+            const query = ((req.url.split("?")[1]).split("&"));
+            console.log(query);
+            next();
+        }
+    }
+
     //Registering middleware
     use(logger);
+    use(queryParser);
     use(jsonParser);
 
     //get(path,handler)
