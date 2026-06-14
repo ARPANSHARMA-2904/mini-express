@@ -90,7 +90,7 @@ function jsonParser(req, res, next) {
         } catch (error) {
 
             res.statusCode = 400;
-            res.end("Invalid JSON");
+            res.send("Invalid JSON");
 
         }
     });
@@ -105,10 +105,16 @@ function queryParser(req, res, next) {
         const queries = ((req.url.split("?")[1]).split("&"));
         const queryObject = {};
         for (const query of queries) {
+            if (query === "") continue;
             const [key, value] = query.split("=");
             // const key = query.split("=")[0];   <- I actually used this method before until I saw somewhere that you can split using const [key, value] = query.split("="); which I think is a better approach and avoids splitting twice, haha
             // const value = query.split("=")[1];
-            queryObject[key] = value;
+            if (value === undefined) {
+                queryObject[key] = "";
+            } else {
+                queryObject[key] = value;
+            }
+
         }
         req.query = queryObject;
         console.log(req.query);
@@ -140,28 +146,31 @@ function post(path, handler) {
 }
 
 get("/", (req, res) => {
-    res.end("Home page");
+    res.send("Home page");
 })
 
 get("/users", (req, res) => {
-    res.end("Get users");
+    res.send("Get users");
 })
 
 get("/users/:id", (req, res) => {
-    res.end(`Get usersid = ${req.params.id} `);
+    res.send(`Get usersid = ${req.params.id} `);
 })
 
 post("/users", (req, res) => {
     console.log(req.body);
-    res.end("User created");
+    res.send("User created");
 
 })
 
 get("/products", (req, res) => {
-    res.end("Get products");
+    res.send("Get products");
 })
 
 const server = http.createServer((req, res) => {
+    res.send = function (data) {
+        res.end(data);
+    }
     let index = 0;
     function next() {
         const middleware = middlewares[index];
@@ -177,11 +186,11 @@ const server = http.createServer((req, res) => {
                 return result.handler(req, res);
             }
             res.statusCode = 404;
-            res.end("Route not Found");
+            res.send("Route not Found");
         } catch (e) {
             console.error(e);
             res.statusCode = 500;
-            res.end("Internal Server error");
+            res.send("Internal Server error");
         }
     }
     next();
