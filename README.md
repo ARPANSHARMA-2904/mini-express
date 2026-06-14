@@ -1,4 +1,8 @@
 
+> [!WARNING]
+> **This README is not up to date.**
+>
+> The project is under active development, and parts of this documentation may be outdated or incomplete. Refer to the source code and recent commits for the latest implementation details.
 ---
 
 #  Mini HTTP Server (From Scratch – No Express)

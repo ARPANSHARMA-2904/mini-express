@@ -173,7 +173,7 @@ const server = http.createServer((req, res) => {
     }
     res.json = function(data){
         //So I actually Chatgpt-ed the explanation for what exactly res.json is-> it technically sends
-        //an object like string to the client
+        //a JSON formatted(object) string to the client as the HTTP protocol can only transmit texts(bytes)
         res.setHeader("Content-Type","application/json");
         return res.send(JSON.stringify(data));
     }
