@@ -65,8 +65,9 @@ function logger(req, res, next) {
 function jsonParser(req, res, next) {
 
     const methodsWithBody = ["POST", "PUT", "PATCH"];
+    const contentType = req.get["content-type"];
 
-    if (!methodsWithBody.includes(req.method)) {
+    if (!methodsWithBody.includes(req.method) || !contentType?.includes("application/json")) {
         return next();
     }
 
@@ -168,13 +169,25 @@ get("/products", (req, res) => {
 })
 
 const server = http.createServer((req, res) => {
+    //res.send is primarily used for sending one-time responses in standard RESTful requests (GET, POST, PUT, DELETE) or 
+    // for rendering HTML to a browser.  It automatically detects the input type (string, buffer, object, or array) and 
+    // sets the appropriate Content-Type header (e.g., text/html for strings, application/json for objects), ending the 
+    // response process without needing an explicit res.end() call. 
+
+    //req.get is used to retrieve the value of specific HTTP headers from the incoming client request.  
+    // This allows developers to access metadata such as the User-Agent, Content-Type, or Authorization tokens 
+    // to implement logic like authentication, content negotiation, or logging. 
+    //(the sources for this definition are- w3schools and the medium)
     res.send = function (data) {
         res.end(data);
     }
-    res.json = function(data){
-        //So I actually Chatgpt-ed the explanation for what exactly res.json is-> it technically sends
+    req.get = function (name) {
+        return req.headers[name.toLowerCase()];
+    }
+    res.json = function (data) {
+        //So I actually Chatgpt-ed the explanation for what exactly res.json does in Express-> it technically sends
         //a JSON formatted(object) string to the client as the HTTP protocol can only transmit texts(bytes)
-        res.setHeader("Content-Type","application/json");
+        res.setHeader("Content-Type", "application/json");
         return res.send(JSON.stringify(data));
     }
     let index = 0;
