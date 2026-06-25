@@ -123,10 +123,28 @@ function queryParser(req, res, next) {
     }
 }
 
+//4. Cookie Parser
+function cookieParser(req, res, next) {
+    if (!req.headers.cookie) {
+        req.cookies = {};
+        return next();
+    }
+    const cookies = req.headers.cookie.split(";");
+    const cookieObject = {};
+    for (const cookie of cookies) {
+        const [key, value] = cookie.trim().split("=");
+        cookieObject[key] = value;
+    }
+
+    req.cookies = cookieObject;
+    next();
+}
+
 //Registering middleware
 use(logger);
 use(queryParser);
 use(jsonParser);
+use(cookieParser);
 
 //get(path,handler)
 function get(path, handler) {
@@ -178,7 +196,19 @@ const server = http.createServer((req, res) => {
     // This allows developers to access metadata such as the User-Agent, Content-Type, or Authorization tokens 
     // to implement logic like authentication, content negotiation, or logging. 
     //(the sources for this definition are- w3schools and the medium)
+
+    res.set = function (name, value) {
+        res.setHeader(name, value);
+        return res;
+    }
     res.send = function (data) {
+        if (typeof data === "object") {
+            return res.json(data);
+        }
+        if (!res.getHeader("Content-Type")) {
+            res.set("Content-Type", "text/plain");
+        }
+
         res.end(data);
     }
     req.get = function (name) {
